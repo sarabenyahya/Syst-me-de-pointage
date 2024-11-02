@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Reconnaissance Faciale{% endblock title %}
+{% block content %}
+
+    <section class="pt-4 pb-5 pt-md-11" x-data="cameraApp( '{% url 'attendance:toggle-camera' %}', '{% url 'attendance:toggle-recognition' %}', '{% url 'attendance:recognize-and-register' %}' )">
+        <div class="container  mb-4 " data-aos="fade-right">
+        <h3>Pointage par la caméra <span class="text-success" data-typed='{"strings": ["N°1"]}'></span>.</h3>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="camera-container">
+                    <img :src="isCameraOn ? '{% url 'attendance:video-feed' %}' : '{% static 'img/security-camera.png' %}'"
+                    alt="Camera">
+                </div>
+    
+            <button :class="isCameraOn ? 'btn btn-sm btn-outline-danger lift' : 'btn btn-sm btn-outline-secondary lift'"  @click="toggleCamera" x-text="isCameraOn ? 'Etéindre la Cam' : 'Activer la Cam'"></button>
+           
+            <div class="form-check form-switch mt-5" x-show="isCameraOn">
+                <span class="text-secondary"> <span x-text="!isFaceRecognitionEnabled ? 'Activer la reconnaissance' : 'Desactiver la reconnaissance'"></span> <input class="form-check-input" type="checkbox" x-model="isFaceRecognitionEnabled" @change="toggleRecognition">
+              </div>
+         
+    
+              
+            </div>
+            <div class="col-lg-4" data-aos="fade-left">
+                    <div  x-show="employeeDetected" class="card mb-6 mb-lg-0 shadow-light-lg">
+                        <h2 class="card-header text-primary">Dernier employé pointé</h2>
+
+                        <!-- Image -->
+                        <div class="card-img-top mt-3 ">
+                          <img :src="employee.photo" alt="..." class="avatar" >
+                        </div>
+        
+                        <!-- Body -->
+                        <div class="card-body" >
+          
+                          <!-- Heading -->
+                          <h3>
+                            <span x-text="employee.name"></span>
+                          </h3>
+          
+                          <!-- Text -->
+                          <p class="mb-0 text-body-secondary">
+                            Département : <span class="text-success fw-bold" x-text="employee.department"></span>
+                          </p>
+                          <p class="mb-0 text-body-secondary">
+                            Poste : <span class="text-success fw-bold" x-text="employee.position"></span>
+                          </p>
+                          <p class="mb-0 text-body-secondary">
+                            N° CNSS : <span class="text-success fw-bold" x-text="employee.insurance_number"></span>
+                          </p>
+          
+                        </div>
+          
+          
+                      </div>
+            
+                    </div>
+        </div>
+       
+    
+    
+    
+        <script src="{% static 'js/app.js' %}"></script>
+    </div>
+        </section>
+
+
+{% endblock content %}
+

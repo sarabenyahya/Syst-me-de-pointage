@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Attendance System</title>
+        {% load static %}
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                min-height: 100vh;
+                margin: 0;
+                background-color: #f0f0f0;
+            }
+            h1 {
+                color: #333;
+            }
+            .camera-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+                border: 1px solid #ccc;
+                width: 640px;
+                height: 480px;
+            }
+        </style>
+        <!-- Alpine.js CDN -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    </head>
+    <body x-data="cameraApp( '{% url 'attendance:toggle-camera' %}', '{% url 'attendance:toggle-recognition' %}', '{% url 'attendance:recognize-and-register' %}' )">
+    <h1>Attendance System with Face Recognition</h1>
+    <div class="camera-container">
+        <img :src="isCameraOn ? '{% url 'attendance:video-feed' %}' : '{% static 'img/security-camera.png' %}'"
+             alt="Camera">
+    </div>
+    <button @click="toggleCamera" x-text="isCameraOn ? 'Stop Camera' : 'Start Camera'"></button>
+    <label x-show="isCameraOn">
+        <input type="checkbox" x-model="isFaceRecognitionEnabled" @change="toggleRecognition"> Activer la reconnaissance
+        faciale
+    </label>
+
+
+    <!-- Employee Info Card -->
+    <div x-show="employeeDetected">
+        <h2>Employee Details:</h2>
+        <p>Name: <span x-text="employee.name"></span></p>
+        <p>Department: <span x-text="employee.department"></span></p>
+        <p>Position: <span x-text="employee.position"></span></p>
+<!--        <img :src="employee.photo" alt="Employee Photo" style="max-width: 15Opx; height: auto">-->
+    </div>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    </body>
+</html>
